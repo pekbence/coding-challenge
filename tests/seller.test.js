@@ -90,9 +90,9 @@ describe("Seller", function(){
 
     it("should return correct receipt when seller sells all stock", () =>{
         let sut = new Seller(sellerInventory);
-        const buyAmount = 1000;
+        const overboughtAmount = 1000;
         const expectedBuyAmount = sut.inventory["Oranges"].startingQuantity;
-        let receipt = sut.sell("Oranges", buyAmount);
+        let receipt = sut.sell("Oranges", overboughtAmount);
         expect(receipt.cost).toEqual(sut.inventory["Oranges"].priceHistory[0] * expectedBuyAmount);
         expect(receipt.boughtQuantity).toEqual(expectedBuyAmount);
     })

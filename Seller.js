@@ -2,14 +2,12 @@ const stream = require('stream');
 const rand = require('random-seed');
 
 
-function getExpectedChange(id) {
-    let gen = rand.create(id);
-    gen(10);
-    return gen(10) / 10;
+function getExpectedChange(generator) {
+    return generator(100) / 100;
 }
 
-function getDeliveries(iProduct, id) {
-    let fluctuation = getExpectedChange(id);
+function getDeliveries(iProduct, generator) {
+    let fluctuation = getExpectedChange(generator);
     let newDeliveries = fluctuation * iProduct.startingQuantity;
     iProduct.quantity += iProduct.quantity + newDeliveries;
     return iProduct;
@@ -19,13 +17,13 @@ class Seller {
     constructor(inventory, id = "Safeway", deliveryWait = 5) {
         this.inventory = inventory;
         this.deliveryWait = deliveryWait;
+        this.random_generator = rand(id);
         this.id = id;
         for (let [key, value] of Object.entries(inventory)) {
             value.startingQuantity = value.quantity;
-            value.stingyness = 0;
             value.priceHistory = [value.price];
+            value.stingyness = 0;
         }
-        this.priceStream = stream.Readable();
     }
     quote(product) {
         const inventory = this.inventory[product];
@@ -34,11 +32,12 @@ class Seller {
 
     calculatePriceChange(product){
         const inventory = this.inventory[product];
-        const v = 0.5
-        const ec = getExpectedChange(this.id);
+        const v = 0.1
+        const ec = getExpectedChange(this.random_generator);
         const alpha = inventory.startingQuantity
         const beta = inventory.quantity
-        const sentimentChange = Math.log10(beta/alpha)*(-v) + (ec - 0.5)
+        const inv_based_change = Math.log10(beta / alpha) * (-v);
+        const sentimentChange = inv_based_change + ((ec - 0.5)*v)
         return sentimentChange;
     }
     
@@ -58,7 +57,7 @@ class Seller {
             let inventory = value;
             const isReadyForDelivery = (inventory.priceHistory.length % this.deliveryWait) == 0;
             if (isReadyForDelivery) {
-                inventory = getDeliveries(inventory, this.id);
+                inventory = getDeliveries(inventory, this.random_generator);
             }
             let chg = this.calculatePriceChange(product);
             inventory.price = inventory.price + (inventory.price*chg)

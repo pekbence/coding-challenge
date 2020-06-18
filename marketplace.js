@@ -66,6 +66,4 @@ const costco = new Seller({
     }
 }, "Costco", 10);
 
-const marketPlace = new Market([asda, budgens, costco]);
-
-module.exports = {marketPlace}
+module.exports = {asda,budgens, costco}

@@ -1,5 +1,4 @@
-const {interval } = require('rxjs');
-const { Subject } = require('rxjs');
+const { Subject, interval } = require('rxjs');
 
 class Market {
     constructor(sellers) {

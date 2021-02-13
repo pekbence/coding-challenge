@@ -5,15 +5,14 @@ class Market {
         this.sellers = sellers;
         this.observable = new Subject();
         this.observable.subscribe({
-            next: (v) => this.tick()
+            next: (v) => this.tick(),
         });
-        interval(5000).subscribe(v => this.observable.next(v));
+        interval(5000).subscribe((v) => this.observable.next(v));
     }
 
-    tick(){
-
-        this.sellers.forEach(seller => {
-            seller.tick()
+    tick() {
+        this.sellers.forEach((seller) => {
+            seller.tick();
         });
     }
 }

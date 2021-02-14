@@ -35,18 +35,18 @@ describe('Seller', () => {
     it('should be maximally stingy when empty inventory', () => {
         const sut = new Seller(sellerInventory);
         sut.sell('Apples', 105);
-        expect(sut.inventory.Apples.stingyness).toEqual(1);
+        expect(sut.inventory.Apples.stinginess).toEqual(1);
     });
 
     it('should be minimally stingy when full inventory', () => {
         const sut = new Seller(sellerInventory);
-        expect(sut.inventory.Apples.stingyness).toEqual(0);
+        expect(sut.inventory.Apples.stinginess).toEqual(0);
     });
 
     it('should be somewhat stingy when half inventory', () => {
         const sut = new Seller(sellerInventory);
         sut.sell('Apples', sut.inventory.Apples.quantity / 2);
-        expect(sut.inventory.Apples.stingyness).toEqual(0.5);
+        expect(sut.inventory.Apples.stinginess).toEqual(0.5);
     });
 
     it('should quote initial price on first ask', () => {

@@ -21,7 +21,7 @@ class Seller {
         for (const [key, value] of Object.entries(inventory)) {
             value.startingQuantity = value.quantity;
             value.priceHistory = [value.price];
-            value.stingyness = 0;
+            value.stinginess = 0;
         }
     }
 
@@ -46,7 +46,7 @@ class Seller {
         const boughtQuantity = buyQuantity > inventory.quantity ? inventory.quantity : buyQuantity;
         const cost = boughtQuantity * this.quote(product);
         inventory.quantity -= boughtQuantity;
-        inventory.stingyness = 1 - inventory.quantity / inventory.startingQuantity;
+        inventory.stinginess = 1 - inventory.quantity / inventory.startingQuantity;
         this.tick();
         return { boughtQuantity, cost };
     }

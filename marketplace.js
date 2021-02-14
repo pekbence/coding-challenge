@@ -14,7 +14,7 @@ const asda = new Seller({
         quantity: 10,
         price: 15.0,
     },
-    Banannas: {
+    Bananas: {
         quantity: 1000,
         price: 10.0,
     },
@@ -33,7 +33,7 @@ const budgens = new Seller({
         quantity: 10,
         price: 21.0,
     },
-    Banannas: {
+    Bananas: {
         quantity: 100,
         price: 4.0,
     },
@@ -60,7 +60,7 @@ const costco = new Seller({
         quantity: 10,
         price: 100.0,
     },
-    Banannas: {
+    Bananas: {
         quantity: 100,
         price: 8.0,
     },

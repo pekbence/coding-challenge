@@ -19,6 +19,7 @@
     "jest": "^26.0.1"
   },
   "dependencies": {
+    "lodash.clonedeep": "^4.5.0",
     "random-seed": "^0.3.0",
     "rxjs": "^6.5.5"
   }

@@ -1,4 +1,3 @@
-const { Market } = require('./Market');
 const { Seller } = require('./Seller');
 
 const asda = new Seller({

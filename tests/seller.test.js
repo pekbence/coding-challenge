@@ -71,7 +71,7 @@ describe('Seller', () => {
     it('should be able to set delivery schedule', () => {
         const deliveryCadence = 3;
         const sut = new Seller(sellerInventory, 'Asda', deliveryCadence);
-        allOranges = sut.inventory.Oranges.quantity;
+        const allOranges = sut.inventory.Oranges.quantity;
         sut.sell('Oranges', allOranges);
         expect(sut.inventory.Oranges.quantity).toEqual(0);
         sut.tick('Oranges');

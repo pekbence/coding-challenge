@@ -13,12 +13,15 @@ function main() {
 
 function buyerFunctions(product, quantity, buyer) {
     console.log(`The best price for ${product} is ${buyer.getBestPrice(product)}`);
-    console.log(`To completely fill a order of ${quantity} ${product} costs ${buyer.completelyFill(product, quantity)}`);
+    // eslint-disable-next-line max-len
+    console.log(`To completely fill an order of ${quantity} ${product} costs ${buyer.completelyFill(product, quantity)}`);
     console.log(`To buy as quickly as possible ${quantity} ${product} costs ${buyer.quicklyFill(product, quantity)}`);
+    // eslint-disable-next-line max-len
+    console.log(`To buy from the fewest sellers ${quantity} ${product} costs ${buyer.fillWithLargestSellers(product, quantity)}`);
 }
 
 function observeMarket(market) {
-    market.observable.subscribe((mkt) => {
+    market.observable.subscribe(mkt => {
         console.log(`The current price of apples are ${market.sellers[0].inventory.Apples.price}`);
     });
 }

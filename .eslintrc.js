@@ -14,6 +14,12 @@ module.exports = {
     },
     rules: {
         indent: ['error', 4],
+        'max-len': ['error', 120],
+        'object-curly-newline': ['error', {
+            ObjectPattern: { multiline: false },
+
+        }],
+        'arrow-parens': ['error', 'as-needed'],
         'jest/no-disabled-tests': 'warn',
         'jest/no-focused-tests': 'error',
         'jest/no-identical-title': 'error',

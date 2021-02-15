@@ -17,7 +17,6 @@ function buyerFunctions(product, quantity, buyer) {
     }
 }
 
-// eslint-disable-next-line no-unused-vars
 function observeMarket(market) {
     market.observable.subscribe(() => {
         console.log(`The current price of apples are ${market.sellers[0].inventory.Apples.price}`);

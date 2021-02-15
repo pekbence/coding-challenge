@@ -9,10 +9,11 @@ function getExpectedChange(generator) {
 }
 
 function getDeliveries(iProduct, generator) {
+    const product = iProduct;
     const fluctuation = getExpectedChange(generator);
-    const newDeliveries = fluctuation * iProduct.startingQuantity;
-    iProduct.quantity += iProduct.quantity + newDeliveries;
-    return iProduct;
+    const newDeliveries = fluctuation * product.startingQuantity;
+    product.quantity += product.quantity + newDeliveries;
+    return product;
 }
 
 class Seller {
@@ -21,11 +22,13 @@ class Seller {
         this.deliveryWait = deliveryWait;
         this.random_generator = rand(id);
         this.id = id;
-        for (const [key, value] of Object.entries(inventory)) {
-            value.startingQuantity = value.quantity;
-            value.priceHistory = [value.price];
-            value.stinginess = 0;
-        }
+        Object.values(this.inventory).forEach(productInventory => {
+            Object.assign(productInventory, {
+                startingQuantity: productInventory.quantity,
+                priceHistory: [productInventory.price],
+                stinginess: 0,
+            });
+        });
     }
 
     quote(product) {
@@ -72,9 +75,9 @@ class Seller {
     }
 
     tick() {
-        for (const [product, value] of Object.entries(this.inventory)) {
+        Object.entries(this.inventory).forEach(([product, value]) => {
             let inventory = value;
-            const isReadyForDelivery = (inventory.priceHistory.length % this.deliveryWait) == 0;
+            const isReadyForDelivery = (inventory.priceHistory.length % this.deliveryWait) === 0;
             if (isReadyForDelivery) {
                 inventory = getDeliveries(inventory, this.random_generator);
             }
@@ -93,7 +96,7 @@ class Seller {
             */
             inventory.price += (inventory.price * chg);
             inventory.priceHistory.push(inventory.price);
-        }
+        });
     }
 }
 

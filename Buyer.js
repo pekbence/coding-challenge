@@ -3,7 +3,7 @@ const { multiKeySort } = require('./utilities');
 const checkMarketQuantity = (sellersInventoryForProduct, requiredQuantity) => {
     const productQuantityOnMarket = sellersInventoryForProduct.reduce((sum, { quantity }) => sum + quantity, 0);
     if (!productQuantityOnMarket) {
-        throw new Error('Unfortunately there are no available product on the market');
+        throw new Error('Unfortunately there are no available products on the market');
     }
     if (requiredQuantity > productQuantityOnMarket) {
         throw new Error(`Unfortunately there are only ${productQuantityOnMarket} product(s) available on the market`);

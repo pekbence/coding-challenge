@@ -25,7 +25,7 @@ describe('Buyer', () => {
 
     it('should throw error when there are no products on the market', () => {
         expect(() => buyer.fillOrderByPreference('Pears', 1, sortOrderPreference))
-            .toThrow('Unfortunately there are no available product on the market');
+            .toThrow('Unfortunately there are no available products on the market');
     });
 
     it('should throw error when there are not enough products on the market', () => {

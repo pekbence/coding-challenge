@@ -1,4 +1,3 @@
-const stream = require('stream');
 const rand = require('random-seed');
 
 function getExpectedChange(generator) {

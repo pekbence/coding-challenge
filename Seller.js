@@ -1,20 +1,5 @@
 const rand = require('random-seed');
-
-function getExpectedChange(generator) {
-    /* Based on the given formula ec should be between 0 and 1 (both side inclusive)
-     * so I changed the original implementation which was exclusive from the right
-     * (generator was not able to reach number 100)
-     */
-    return generator.intBetween(0, 100) / 100;
-}
-
-function getDeliveries(iProduct, generator) {
-    const product = iProduct;
-    const fluctuation = getExpectedChange(generator);
-    const newDeliveries = fluctuation * product.startingQuantity;
-    product.quantity += product.quantity + newDeliveries;
-    return product;
-}
+const { getExpectedChange, getDeliveries } = require('./utilities');
 
 class Seller {
     constructor(inventory, id = 'Safeway', deliveryWait = 5) {

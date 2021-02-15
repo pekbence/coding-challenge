@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const { asda, costco, budgens } = require('./marketplace');
+const { asda, costco, budgens, fairTrade } = require('./marketplace');
 const { Market } = require('./Market');
 const { Buyer } = require('./Buyer');
 
@@ -24,7 +24,7 @@ function observeMarket(market) {
 }
 
 function main() {
-    const market = new Market([asda, budgens, costco]);
+    const market = new Market([asda, budgens, costco, fairTrade]);
     const buyer = new Buyer(market);
     const product = 'Apples';
     const quantity = 10;

@@ -1,70 +1,88 @@
-const stream = require('stream');
 const rand = require('random-seed');
-
-
-function getExpectedChange(generator) {
-    return generator(100) / 100;
-}
-
-function getDeliveries(iProduct, generator) {
-    let fluctuation = getExpectedChange(generator);
-    let newDeliveries = fluctuation * iProduct.startingQuantity;
-    iProduct.quantity += iProduct.quantity + newDeliveries;
-    return iProduct;
-}
+const { getExpectedChange, getDeliveries } = require('./utilities');
 
 class Seller {
-    constructor(inventory, id = "Safeway", deliveryWait = 5) {
+    constructor(inventory, id = 'Safeway', deliveryWait = 5) {
         this.inventory = inventory;
         this.deliveryWait = deliveryWait;
         this.random_generator = rand(id);
         this.id = id;
-        for (let [key, value] of Object.entries(inventory)) {
-            value.startingQuantity = value.quantity;
-            value.priceHistory = [value.price];
-            value.stingyness = 0;
-        }
+        Object.values(this.inventory).forEach(productInventory => {
+            Object.assign(productInventory, {
+                startingQuantity: productInventory.quantity,
+                priceHistory: [productInventory.price],
+                stinginess: 0,
+            });
+        });
     }
+
     quote(product) {
         const inventory = this.inventory[product];
         return inventory.price;
     }
 
-    calculatePriceChange(product){
+    calculatePriceChange(product) {
         const inventory = this.inventory[product];
-        const v = 0.1
+        const v = 0.1;
         const ec = getExpectedChange(this.random_generator);
-        const alpha = inventory.startingQuantity
-        const beta = inventory.quantity
-        const inv_based_change = Math.log10(beta / alpha) * (-v);
-        const sentimentChange = inv_based_change + ((ec - 0.5)*v)
+        /*
+         * If starting inventory is 0 then Math.log10(beta / alpha) will return infinity.
+         * If current inventory is 0 then Math.log10(beta / alpha) will return negative infinity.
+         *
+         * In my opinion we should only calculate invBasedChange if we have both alpha and beta else
+         * we should set it to 0.
+         * Market sentiment could still change so we can calculate with it,
+         * but the best solution would be to ask the business analyst for a flawless formula.
+         *
+         * Now I'm updating it based on my opinion to show what I meant.
+         *
+         */
+        const alpha = inventory.startingQuantity;
+        const beta = inventory.quantity;
+        /*
+        * I would also ask the business analyst if we really should use 10 based logarithm in the algorithm
+        * in some areas / cases 'log' means natural (e based) logarithm.
+        */
+        const invBasedChange = (alpha && beta) ? (Math.log10(beta / alpha) * (-v)) : 0;
+        const sentimentChange = invBasedChange + ((ec - 0.5) * v);
+
         return sentimentChange;
     }
-    
+
     sell(product, buyQuantity) {
         const inventory = this.inventory[product];
         const boughtQuantity = buyQuantity > inventory.quantity ? inventory.quantity : buyQuantity;
         const cost = boughtQuantity * this.quote(product);
         inventory.quantity -= boughtQuantity;
-        inventory.stingyness = 1 - inventory.quantity / inventory.startingQuantity;
+        inventory.stinginess = 1 - inventory.quantity / inventory.startingQuantity;
         this.tick();
-        return {boughtQuantity, cost};
+        return { boughtQuantity, cost };
     }
 
-
     tick() {
-        for (let [product, value] of Object.entries(this.inventory)) {
+        Object.entries(this.inventory).forEach(([product, value]) => {
             let inventory = value;
-            const isReadyForDelivery = (inventory.priceHistory.length % this.deliveryWait) == 0;
+            const isReadyForDelivery = (inventory.priceHistory.length % this.deliveryWait) === 0;
             if (isReadyForDelivery) {
                 inventory = getDeliveries(inventory, this.random_generator);
             }
-            let chg = this.calculatePriceChange(product);
-            inventory.price = inventory.price + (inventory.price*chg)
+            const chg = this.calculatePriceChange(product);
+            /*
+            * In rare cases we can get prices we don't really want
+            * like negative prices, that can happen in some markets,
+            * but maybe some of the sellers wants to avoid it.
+            * or extremely high prices
+            *
+            * Markets can have regulations regarding the price as well.
+            *
+            * Javascript also have limitations regarding the number type
+            * I would add a minimumPrice and a maximumPrice property to the inventories
+            * with defaults that safeguard javascript number from overflow.
+            */
+            inventory.price += (inventory.price * chg);
             inventory.priceHistory.push(inventory.price);
-        }
+        });
     }
 }
 
-
-module.exports = {Seller}
+module.exports = { Seller };

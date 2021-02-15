@@ -1,5 +1,4 @@
-const { Seller } = require('./Seller');
-const { FairPriceSeller } = require('./FairPriceSeller');
+const { Seller } = require('../../Seller');
 
 const asda = new Seller({
     Apples: {
@@ -11,7 +10,7 @@ const asda = new Seller({
         price: 8.0,
     },
     Pears: {
-        quantity: 10,
+        quantity: 0,
         price: 15.0,
     },
     Bananas: {
@@ -53,7 +52,7 @@ const costco = new Seller({
         price: 35.0,
     },
     Pears: {
-        quantity: 100,
+        quantity: 0,
         price: 30.0,
     },
     Mangosteen: {
@@ -66,23 +65,4 @@ const costco = new Seller({
     },
 }, 'Costco', 10);
 
-const fairTrade = new FairPriceSeller({
-    Apples: {
-        quantity: 120,
-        price: 10,
-    },
-    Oranges: {
-        quantity: 150,
-        price: 8.0,
-    },
-    Pears: {
-        quantity: 10,
-        price: 15.0,
-    },
-    Bananas: {
-        quantity: 1000,
-        price: 10.0,
-    },
-}, 'FairTrade', 1);
-
-module.exports = { asda, budgens, costco, fairTrade };
+module.exports = { asda, budgens, costco };

@@ -2,8 +2,11 @@ const { multiKeySort } = require('./utilities');
 
 const checkMarketQuantity = (sellersInventoryForProduct, requiredQuantity) => {
     const productQuantityOnMarket = sellersInventoryForProduct.reduce((sum, { quantity }) => sum + quantity, 0);
+    if (!productQuantityOnMarket) {
+        throw new Error('Unfortunately there are no available product on the market');
+    }
     if (requiredQuantity > productQuantityOnMarket) {
-        throw new Error(`Unfortunately there are only ${productQuantityOnMarket} produce available on the market`);
+        throw new Error(`Unfortunately there are only ${productQuantityOnMarket} product(s) available on the market`);
     }
 };
 
@@ -41,7 +44,7 @@ class Buyer {
             })
             .filter(v => v);
         if (!sellersInventoryForProduct.length) {
-            throw new Error('Produce not found on the market');
+            throw new Error('Product not found on the market');
         }
         return sellersInventoryForProduct;
     }

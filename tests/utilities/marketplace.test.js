@@ -10,7 +10,7 @@ const asda = new Seller({
         price: 8.0,
     },
     Pears: {
-        quantity: 10,
+        quantity: 0,
         price: 15.0,
     },
     Bananas: {
@@ -52,7 +52,7 @@ const costco = new Seller({
         price: 35.0,
     },
     Pears: {
-        quantity: 100,
+        quantity: 0,
         price: 30.0,
     },
     Mangosteen: {
